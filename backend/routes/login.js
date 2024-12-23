@@ -18,7 +18,6 @@ loginRouter.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Incorrect password" })
     }
 
-    // Generate token
     const userForToken = {
       id: existingUser._id,
       email: existingUser.email,
@@ -45,10 +44,10 @@ loginRouter.post("/login", async (req, res) => {
   }
 })
 
-// User info route that requires token validation
+// Get user info
 loginRouter.get("/user-info", getToken, async (req, res) => {
   try {
-    const userId = req.user.id // Extract user ID from the JWT token
+    const userId = req.user.id //id from jwt
     const user = await User.findById(userId)
 
     if (!user) {
