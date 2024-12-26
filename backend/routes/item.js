@@ -71,3 +71,48 @@ router.delete("/deleteitem", getToken, async (req, res) => {
   }
 })
 module.exports = router
+//get all items
+router.get("/allitems", async (req, res) => {
+  try {
+    const items = await Item.find().sort({ createdAt: -1 })
+    return res.json({
+      message: "Items fetched successfully",
+      data: items,
+    })
+  } catch (error) {
+    console.error("Error fetching items:", error)
+    res.status(500).json({ message: "Server error" })
+  }
+})
+//newly added(home page)(4 items)
+router.get("/newitems", async (req, res) => {
+  try {
+    const items = await Item.find().sort({ created: -1 }).limit(4)
+    return res.json({
+      message: "Recently added items fetched successfully",
+      data: items,
+    })
+  } catch (error) {
+    console.error("Error fetching items:", error)
+    res.status(500).json({ message: "Server error" })
+  }
+})
+//get item by id
+router.get("/getitem/:id", async (req, res) => {
+  try {
+    const { id } = req.params
+    const item = await Item.findById(id)
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" })
+    }
+    return res.json({
+      message: "Item fetched successfully",
+      data: item,
+    })
+  } catch (error) {
+    console.error("Error fetching item:", error)
+    res.status(500).json({ message: "Server error" })
+  }
+})
+
+module.exports = router
